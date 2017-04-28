@@ -34,6 +34,23 @@ app.get('/test', function (req, res) {
 /**
  * 用户表相关
  */
+//过滤用户表
+app.get('/getNameListByName', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var text = url.parse(req.url, true).query.text;
+  var query = "SELECT * FROM people WHERE city = ? and name LIKE  '" + text + "%'";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取用户表
+app.get('/getPeopleList', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT * FROM people where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //添加用户表
 app.get('/addTablePeople', function (req, res) {
   var id = url.parse(req.url, true).query.id;
@@ -53,6 +70,16 @@ app.get('/addTablePeople', function (req, res) {
 /**
  * 表二相关
  */
+//获取表二数据 
+app.get('/gettable2Datas', function (req, res) {
+  var id = url.parse(req.url, true).query.id;
+  var page = url.parse(req.url, true).query.page;
+  var limit1 = 10 * (page-1);
+  var query = "SELECT * FROM table2 where id = ? limit ?,10";
+  connection.query(query, [id,limit1], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //添加表二
 app.get('/addTable2', function (req, res) {
   //id prj unit quantity fID price
@@ -100,6 +127,14 @@ app.get('/deleteTable2', function (req, res) {
 /**
  * 表一相关
  */
+//根据id获取表一数据 
+app.get('/getTable1ById', function (req, res) {
+  var id = url.parse(req.url, true).query.id;
+  var query = "SELECT * FROM table1 where id = ?";
+  connection.query(query, [id], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //添加表一
 app.get('/addTable1', function (req, res) {
   //name id family people rail type area land nonland prj unit quantity city
