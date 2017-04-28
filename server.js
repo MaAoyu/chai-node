@@ -34,6 +34,14 @@ app.get('/test', function (req, res) {
 /**
  * 用户表相关
  */
+//删除用户表
+app.get('/deletePeopleTable', function (req, res) {
+  var pk = url.parse(req.url, true).query.pk;
+  var query = "DELETE FROM people WHERE id = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //过滤用户表
 app.get('/getNameListByName', function (req, res) {
   var city = url.parse(req.url, true).query.city;
@@ -70,6 +78,31 @@ app.get('/addTablePeople', function (req, res) {
 /**
  * 表二相关
  */
+//根据prj得到表二price
+app.get('/getPriceByPrj', function (req, res) {
+  var prj = url.parse(req.url, true).query.prj;
+  var query = "select price from table2 WHERE prj = ?";
+  connection.query(query, [prj], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//更改表二标准
+app.get('/updateTable2', function (req, res) {
+  var prj = url.parse(req.url, true).query.prj;
+  var type = url.parse(req.url, true).query.type;
+  var query = "UPDATE table2 SET price = ? WHERE prj = ?";
+  connection.query(query, [type,prj], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//得到表二行数
+app.get('/getTable2Count', function (req, res) {
+  var id = url.parse(req.url, true).query.id;
+  var query = "SELECT count(*) FROM table2 where id = ?";
+  connection.query(query, [id], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //获取表二数据 
 app.get('/gettable2Datas', function (req, res) {
   var id = url.parse(req.url, true).query.id;
