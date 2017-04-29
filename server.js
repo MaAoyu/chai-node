@@ -76,6 +76,87 @@ app.get('/addTablePeople', function (req, res) {
 })
 
 /**
+ * 表四相关
+ */
+//根据表三更新表四todo
+app.get('/updateTable2ByT1', function (req, res) {
+  // index type1 area1 t1 t2 t3 t4 t5 arcName unit quantity autoID
+  var id = url.parse(req.url, true).query.id;
+  var prj = url.parse(req.url, true).query.prj;
+  var unit = url.parse(req.url, true).query.unit;
+  var quantity = url.parse(req.url, true).query.quantity;
+  var fid = url.parse(req.url, true).query.autoID;
+  var query = "UPDATE table2 SET id = ?,prj=?,unit=?,quantity = ? WHERE fID = ?";
+  connection.query(query, [id,prj,unit,quantity,fid], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+
+/**
+ * 表三相关
+ */
+//更新表三todo
+app.get('/updateTable3', function (req, res) {
+  //index length width high area type1 type2 prj unit quantity autoID 
+  var name = url.parse(req.url, true).query.name;
+  var family = url.parse(req.url, true).query.family;
+  var people = url.parse(req.url, true).query.people;
+  var rail = url.parse(req.url, true).query.rail;
+  var type = url.parse(req.url, true).query.type;
+  var area = url.parse(req.url, true).query.area;
+  var land = url.parse(req.url, true).query.land;
+  var nonland = url.parse(req.url, true).query.nonland;
+  var prj = url.parse(req.url, true).query.prj;
+  var unit = url.parse(req.url, true).query.unit;
+  var quantity = url.parse(req.url, true).query.quantity;
+  var autoID = url.parse(req.url, true).query.autoID;
+  var data1 = {
+    name: name,
+    family: family,
+    people: people,
+    rail: rail,
+    type: type,
+    area: area,
+    land: land,
+    nonland: nonland,
+    prj: prj,
+    unit: unit,
+    quantity: quantity,
+    autoID: autoID
+  };
+  var query = "UPDATE table1 SET ? WHERE autoID = "+data1.autoID;
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//根据主键获取表一数据 
+app.get('/getTable3ByPK', function (req, res) {
+  var pk = url.parse(req.url, true).query.pk;
+  var query = "SELECT * FROM table3 where autoID = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//得到表三行数
+app.get('/getTable3Count', function (req, res) {
+  var id = url.parse(req.url, true).query.id;
+  var query = "SELECT count(*) FROM table3 where id = ?";
+  connection.query(query, [id], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取表三数据 
+app.get('/gettable3Datas', function (req, res) {
+  var id = url.parse(req.url, true).query.id;
+  var page = url.parse(req.url, true).query.page;
+  var limit1 = 10 * (page-1);
+  var query = "SELECT * FROM table3 where id = ? limit ?,10";
+  connection.query(query, [id,limit1], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+
+/**
  * 表二相关
  */
 //根据prj得到表二price
