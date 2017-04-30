@@ -78,16 +78,83 @@ app.get('/addTablePeople', function (req, res) {
 /**
  * 表四相关
  */
-//根据表三更新表四todo
-app.get('/updateTable2ByT1', function (req, res) {
-  // index type1 area1 t1 t2 t3 t4 t5 arcName unit quantity autoID
-  var id = url.parse(req.url, true).query.id;
+//根据prj得到表四price2
+app.get('/getT4Price2ByPrj', function (req, res) {
   var prj = url.parse(req.url, true).query.prj;
+  var query = "select price2 from table4 WHERE arcName = ?";
+  connection.query(query, [prj], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//根据prj得到表四price
+app.get('/getT4PriceByPrj', function (req, res) {
+  var prj = url.parse(req.url, true).query.prj;
+  var query = "select price from table4 WHERE type1 = ?";
+  connection.query(query, [prj], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//删除表四
+app.get('/deleteTable4', function (req, res) {
+  var pk = url.parse(req.url, true).query.pk;
+  var query = "DELETE FROM table4 WHERE fID = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//添加表四
+app.get('/addTable4', function (req, res) {
+  // id index type1 area1 t1 t2 t3 t4 t5 arcName unit quantity fID
+  var id = url.parse(req.url, true).query.id;
+  var index = url.parse(req.url, true).query.index;
+  var area1 = url.parse(req.url, true).query.area1;
+  var type1 = url.parse(req.url, true).query.type1;
+  var t1 = url.parse(req.url, true).query.t1;
+  var t2 = url.parse(req.url, true).query.t2;
+  var t3 = url.parse(req.url, true).query.t3;
+  var t4 = url.parse(req.url, true).query.t4;
+  var t5 = url.parse(req.url, true).query.t5;
+  var arcName = url.parse(req.url, true).query.arcName;
+  var unit = url.parse(req.url, true).query.unit;
+  var quantity = url.parse(req.url, true).query.quantity;
+  var fID = url.parse(req.url, true).query.fID;
+  var query = "INSERT INTO table4 SET ";
+  var data1 = {
+    id: id,
+    index: index,
+    area1: area1,
+    type1: type1,
+    t1: t1,
+    t2: t2,
+    t3: t3,
+    t4: t4,
+    t5: t5,
+    arcName: arcName,
+    unit: unit,
+    quantity: quantity,
+    fID: fID
+  };
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//根据表三更新表四
+app.get('/updateTable4ByT3', function (req, res) {
+  // index type1 area1 t1 t2 t3 t4 t5 arcName unit quantity autoID
+  var index = url.parse(req.url, true).query.index;
+  var area1 = url.parse(req.url, true).query.area1;
+  var type1 = url.parse(req.url, true).query.type1;
+  var t1 = url.parse(req.url, true).query.t1;
+  var t2 = url.parse(req.url, true).query.t2;
+  var t3 = url.parse(req.url, true).query.t3;
+  var t4 = url.parse(req.url, true).query.t4;
+  var t5 = url.parse(req.url, true).query.t5;
+  var arcName = url.parse(req.url, true).query.arcName;
   var unit = url.parse(req.url, true).query.unit;
   var quantity = url.parse(req.url, true).query.quantity;
   var fid = url.parse(req.url, true).query.autoID;
-  var query = "UPDATE table2 SET id = ?,prj=?,unit=?,quantity = ? WHERE fID = ?";
-  connection.query(query, [id,prj,unit,quantity,fid], function (err, dbres) {
+  var query = "UPDATE table4 SET index=?,type1=?,area1=?,t1=?,t2=?,t3=?,t4=?,t5=?,arcName=?,unit=?,quantity=? WHERE fID = ?";
+  connection.query(query, [index,type1,area1,t1,t2,t3,t4,t5,arcName,unit,quantity,fid], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -95,41 +162,81 @@ app.get('/updateTable2ByT1', function (req, res) {
 /**
  * 表三相关
  */
-//更新表三todo
+//删除表三
+app.get('/deleteTable3', function (req, res) {
+  var pk = url.parse(req.url, true).query.pk;
+  var query = "DELETE FROM table3 WHERE autoID = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//添加表三
+app.get('/addTable3', function (req, res) {
+  //index length width high area type1 type2 prj unit quantity id city
+  var index = url.parse(req.url, true).query.index;
+  var length = url.parse(req.url, true).query.length;
+  var width = url.parse(req.url, true).query.width;
+  var high = url.parse(req.url, true).query.high;
+  var area = url.parse(req.url, true).query.area;
+  var type1 = url.parse(req.url, true).query.type1;
+  var type2 = url.parse(req.url, true).query.type2;
+  var prj = url.parse(req.url, true).query.prj;
+  var unit = url.parse(req.url, true).query.unit;
+  var quantity = url.parse(req.url, true).query.quantity;
+  var id = url.parse(req.url, true).query.id;
+  var city = url.parse(req.url, true).query.city;
+  var data1 = {
+    index: index,
+    length: length,
+    width: width,
+    high: high,
+    area: area,
+    type1: type1,
+    type2: type2,
+    prj: prj,
+    unit: unit,
+    quantity: quantity,
+    id: id,
+    city: city
+  };
+  var query = "INSERT INTO table3 SET ?";
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//更新表三
 app.get('/updateTable3', function (req, res) {
   //index length width high area type1 type2 prj unit quantity autoID 
-  var name = url.parse(req.url, true).query.name;
-  var family = url.parse(req.url, true).query.family;
-  var people = url.parse(req.url, true).query.people;
-  var rail = url.parse(req.url, true).query.rail;
-  var type = url.parse(req.url, true).query.type;
+  var index = url.parse(req.url, true).query.index;
+  var length = url.parse(req.url, true).query.length;
+  var width = url.parse(req.url, true).query.width;
+  var high = url.parse(req.url, true).query.high;
   var area = url.parse(req.url, true).query.area;
-  var land = url.parse(req.url, true).query.land;
-  var nonland = url.parse(req.url, true).query.nonland;
+  var type1 = url.parse(req.url, true).query.type1;
+  var type2 = url.parse(req.url, true).query.type2;
   var prj = url.parse(req.url, true).query.prj;
   var unit = url.parse(req.url, true).query.unit;
   var quantity = url.parse(req.url, true).query.quantity;
   var autoID = url.parse(req.url, true).query.autoID;
   var data1 = {
-    name: name,
-    family: family,
-    people: people,
-    rail: rail,
-    type: type,
+    index: index,
+    length: length,
+    width: width,
+    high: high,
     area: area,
-    land: land,
-    nonland: nonland,
+    type1: type1,
+    type2: type2,
     prj: prj,
     unit: unit,
     quantity: quantity,
     autoID: autoID
   };
-  var query = "UPDATE table1 SET ? WHERE autoID = "+data1.autoID;
+  var query = "UPDATE table3 SET ? WHERE autoID = "+data1.autoID;
   connection.query(query, data1, function (err, dbres) {
     res.json(dbres);
   });
 })
-//根据主键获取表一数据 
+//根据主键获取表三数据 
 app.get('/getTable3ByPK', function (req, res) {
   var pk = url.parse(req.url, true).query.pk;
   var query = "SELECT * FROM table3 where autoID = ?";
