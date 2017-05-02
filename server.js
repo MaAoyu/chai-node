@@ -78,6 +78,47 @@ app.get('/addTablePeople', function (req, res) {
 /**
  * 表四相关
  */
+//更新表四价格
+app.get('/updateTable4', function (req, res) {
+  //'price', 'price2', 'o1', 'o2', 'o3', 'o4', 'pID'
+  var price = url.parse(req.url, true).query.price;
+  var price2 = url.parse(req.url, true).query.price2;
+  var o1 = url.parse(req.url, true).query.o1;
+  var o2 = url.parse(req.url, true).query.o2;
+  var o3 = url.parse(req.url, true).query.o3;
+  var o4 = url.parse(req.url, true).query.o4;
+  var fid = url.parse(req.url, true).query.fID;
+  var query = "UPDATE table4 SET price=?,price2=?,o1=?,o2=?,o3=?,o4=? WHERE fID = ?";
+  connection.query(query, [price,price2,o1,o2,o3,o4,fid], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//根据主键获取表四数据 
+app.get('/getTable4ByPK', function (req, res) {
+  var pk = url.parse(req.url, true).query.pk;
+  var query = "SELECT * FROM table4 where autoID = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//得到表四行数
+app.get('/getTable4Count', function (req, res) {
+  var id = url.parse(req.url, true).query.id;
+  var query = "SELECT count(*) FROM table4 where id = ?";
+  connection.query(query, [id], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取表四数据 
+app.get('/gettable4Datas', function (req, res) {
+  var id = url.parse(req.url, true).query.id;
+  var page = url.parse(req.url, true).query.page;
+  var limit1 = 10 * (page-1);
+  var query = "SELECT * FROM table4 where id = ? limit ?,10";
+  connection.query(query, [id,limit1], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //根据prj得到表四price2
 app.get('/getT4Price2ByPrj', function (req, res) {
   var prj = url.parse(req.url, true).query.prj;
@@ -118,7 +159,7 @@ app.get('/addTable4', function (req, res) {
   var unit = url.parse(req.url, true).query.unit;
   var quantity = url.parse(req.url, true).query.quantity;
   var fID = url.parse(req.url, true).query.fID;
-  var query = "INSERT INTO table4 SET ";
+  var query = "INSERT INTO table4 SET ?";
   var data1 = {
     id: id,
     index: index,
@@ -153,8 +194,10 @@ app.get('/updateTable4ByT3', function (req, res) {
   var unit = url.parse(req.url, true).query.unit;
   var quantity = url.parse(req.url, true).query.quantity;
   var fid = url.parse(req.url, true).query.autoID;
-  var query = "UPDATE table4 SET index=?,type1=?,area1=?,t1=?,t2=?,t3=?,t4=?,t5=?,arcName=?,unit=?,quantity=? WHERE fID = ?";
+  var query = "UPDATE table4 SET table4.index=?,type1=?,area1=?,t1=?,t2=?,t3=?,t4=?,t5=?,arcName=?,unit=?,quantity=? WHERE fID = ?";
   connection.query(query, [index,type1,area1,t1,t2,t3,t4,t5,arcName,unit,quantity,fid], function (err, dbres) {
+    console.log(err);
+    console.log(dbres);
     res.json(dbres);
   });
 })
