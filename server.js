@@ -32,7 +32,82 @@ app.get('/test', function (req, res) {
 })
 
 /**
- * 用户表相关
+ * 权限表相关
+ */
+//添加
+app.get('/addUser', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  var password = url.parse(req.url, true).query.password;
+  var city1 = url.parse(req.url, true).query.city1;
+  var city2 = url.parse(req.url, true).query.city2;
+  var city3 = url.parse(req.url, true).query.city3;
+  var data1 = {
+    name: name,
+    password: password,
+    city1: city1,
+    city2: city2,
+    city3: city3
+  };
+  var query = "INSERT INTO user SET ?";
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//更新
+app.get('/updateUser', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  var password = url.parse(req.url, true).query.password;
+  var city1 = url.parse(req.url, true).query.city1;
+  var city2 = url.parse(req.url, true).query.city2;
+  var city3 = url.parse(req.url, true).query.city3;
+  var query = "UPDATE user SET password=?,city1=?,city2=?,city3=? WHERE name = ?";
+  connection.query(query, [password,city1,city2,city3,name], function (err, dbres) {
+    // console.log(err);
+    // console.log(JSON.stringify(dbres));
+    res.json(dbres);
+  });
+})
+//根据name获取user
+app.get('/getUserByName', function (req, res) {
+  var pk = url.parse(req.url, true).query.pk;
+  var query = "SELECT * FROM user WHERE name = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//删除
+app.get('/deleteUser', function (req, res) {
+  var pk = url.parse(req.url, true).query.pk;
+  var query = "DELETE FROM user WHERE name = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取数据
+app.get('/getUserTable', function (req, res) {
+  var query = "SELECT * FROM user";
+  connection.query(query, function (err, dbres) {
+    res.send(dbres);
+  });
+})
+//登陆
+app.get('/login', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  var passWord = url.parse(req.url, true).query.passWord;
+  var query = "SELECT * FROM user WHERE name = ?";
+  connection.query(query, [name], function (err, dbres) {
+    //res.send(err+'***'+dbres);
+    if(dbres=='')
+      res.send({"ok":-1});
+    else if(dbres[0].password == passWord)
+      res.send(dbres[0]);
+    else
+      res.send({"ok":0});
+  });
+})
+
+/**
+ * 户主表相关
  */
 //删除用户表
 app.get('/deletePeopleTable', function (req, res) {
@@ -71,6 +146,18 @@ app.get('/addTablePeople', function (req, res) {
   };
   var query = "INSERT INTO people SET ?";
   connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+
+/**
+ * 表4-1相关
+ */
+//根据村名获取表4-1数据 
+app.get('/getAllTable411Datas', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT * FROM table2 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -347,19 +434,23 @@ app.get('/gettable2Datas', function (req, res) {
 //添加表二
 app.get('/addTable2', function (req, res) {
   //id prj unit quantity fID price
+  var name = url.parse(req.url, true).query.name;
   var id = url.parse(req.url, true).query.id;
   var prj = url.parse(req.url, true).query.prj;
   var unit = url.parse(req.url, true).query.unit;
   var quantity = url.parse(req.url, true).query.quantity;
   var fID = url.parse(req.url, true).query.fID;
   var price = url.parse(req.url, true).query.price;
+  var city = url.parse(req.url, true).query.city;
   var data1 = {
+    name: name,
     id: id,
     prj: prj,
     unit: unit,
     quantity: quantity,
     fID: fID,
-    price: price
+    price: price,
+    city: city
   };
   var query = "INSERT INTO table2 SET ?";
   connection.query(query, data1, function (err, dbres) {
