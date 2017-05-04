@@ -153,11 +153,21 @@ app.get('/addTablePeople', function (req, res) {
 /**
  * 表4-1相关
  */
-//根据村名获取表4-1数据 
+//得到表411行数
+app.get('/getTable411Count', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT count(*) FROM table2 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//根据村名获取表411数据 
 app.get('/getAllTable411Datas', function (req, res) {
   var city = url.parse(req.url, true).query.city;
-  var query = "SELECT * FROM table2 where city = ?";
-  connection.query(query, [city], function (err, dbres) {
+  var page = url.parse(req.url, true).query.page;
+  var limit1 = 10 * (page-1);
+  var query = "SELECT * FROM table2 where city = ? limit ?,10";
+  connection.query(query, [city,limit1], function (err, dbres) {
     res.json(dbres);
   });
 })
