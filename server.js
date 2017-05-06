@@ -30,6 +30,7 @@ app.get('/test', function (req, res) {
     res.json(dbres);
   });
 })
+//console.log(err+'***'+dbres);
 
 /**
  * 权限表相关
@@ -153,6 +154,32 @@ app.get('/addTablePeople', function (req, res) {
 /**
  * 表4-1相关
  */
+//得到表412行数
+app.get('/getTable412Count', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT count(*) FROM table4 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//根据村名获取表412数据-无分页
+app.get('/getAllTable412Datas2', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT * FROM table4 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//根据村名获取表412数据 
+app.get('/getAllTable412Datas', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var page = url.parse(req.url, true).query.page;
+  var limit1 = 10 * (page-1);
+  var query = "SELECT * FROM table4 where city = ? limit ?,10";
+  connection.query(query, [city,limit1], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //得到表411行数
 app.get('/getTable411Count', function (req, res) {
   var city = url.parse(req.url, true).query.city;
@@ -161,7 +188,15 @@ app.get('/getTable411Count', function (req, res) {
     res.json(dbres);
   });
 })
-//根据村名获取表411数据 
+//根据村名获取表411数据-无分页
+app.get('/getAllTable411Datas2', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT * FROM table2 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//根据村名获取表411数据
 app.get('/getAllTable411Datas', function (req, res) {
   var city = url.parse(req.url, true).query.city;
   var page = url.parse(req.url, true).query.page;
@@ -256,6 +291,8 @@ app.get('/addTable4', function (req, res) {
   var unit = url.parse(req.url, true).query.unit;
   var quantity = url.parse(req.url, true).query.quantity;
   var fID = url.parse(req.url, true).query.fID;
+  var city = url.parse(req.url, true).query.city;
+  var name = url.parse(req.url, true).query.name;
   var query = "INSERT INTO table4 SET ?";
   var data1 = {
     id: id,
@@ -270,7 +307,9 @@ app.get('/addTable4', function (req, res) {
     arcName: arcName,
     unit: unit,
     quantity: quantity,
-    fID: fID
+    fID: fID,
+    city: city,
+    name: name
   };
   connection.query(query, data1, function (err, dbres) {
     res.json(dbres);
@@ -392,7 +431,15 @@ app.get('/getTable3Count', function (req, res) {
     res.json(dbres);
   });
 })
-//获取表三数据 
+//根据村子获取表三数据 
+app.get('/getTable3Bycity', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT * FROM table3 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//分页获取表三数据 
 app.get('/gettable3Datas', function (req, res) {
   var id = url.parse(req.url, true).query.id;
   var page = url.parse(req.url, true).query.page;
@@ -492,6 +539,14 @@ app.get('/deleteTable2', function (req, res) {
 /**
  * 表一相关
  */
+//根据村子获取表一面积 
+app.get('/getTable1Area', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT area FROM table1 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //根据id获取表一数据 
 app.get('/getTable1ById', function (req, res) {
   var id = url.parse(req.url, true).query.id;
