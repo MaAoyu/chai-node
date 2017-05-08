@@ -151,6 +151,184 @@ app.get('/addTablePeople', function (req, res) {
   });
 })
 
+/**
+ * 表71相关
+ */
+//获取表71数据 
+app.get('/getTable71', function (req, res) {
+  var query = "SELECT * FROM table71";
+  connection.query(query, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取表71数据 
+app.get('/getTable71ByPK', function (req, res) {
+  var id = url.parse(req.url, true).query.autoID;
+  var query = "SELECT * FROM table71 where autoID = ?";
+  connection.query(query, [id], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//添加表71
+//c3 line a1 b1 f1 m1 a2 b2 f2 m2 city
+app.get('/addTable71', function (req, res) {
+  var c3 = url.parse(req.url, true).query.c3;
+  var line = url.parse(req.url, true).query.line;
+  var a1 = url.parse(req.url, true).query.a1;
+  var b1 = url.parse(req.url, true).query.b1;
+  var f1 = url.parse(req.url, true).query.f1;
+  var m1 = url.parse(req.url, true).query.m1;
+  var a2 = url.parse(req.url, true).query.a2;
+  var b2 = url.parse(req.url, true).query.b2;
+  var f2 = url.parse(req.url, true).query.f2;
+  var m2 = url.parse(req.url, true).query.m2;
+  var city = url.parse(req.url, true).query.city;
+  var data1 = {
+    c3: c3,
+    line: line,
+    a1: a1,
+    b1: b1,
+    f1: f1,
+    m1: m1,
+    a2: a2,
+    b2: b2,
+    f2: f2,
+    m2: m2,
+    city: city
+  };
+  var query = "INSERT INTO table71 SET ?";
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//更新表71
+app.get('/updateTable71', function (req, res) {
+   var c3 = url.parse(req.url, true).query.c3;
+  var line = url.parse(req.url, true).query.line;
+  var a1 = url.parse(req.url, true).query.a1;
+  var b1 = url.parse(req.url, true).query.b1;
+  var f1 = url.parse(req.url, true).query.f1;
+  var m1 = url.parse(req.url, true).query.m1;
+  var a2 = url.parse(req.url, true).query.a2;
+  var b2 = url.parse(req.url, true).query.b2;
+  var f2 = url.parse(req.url, true).query.f2;
+  var m2 = url.parse(req.url, true).query.m2;
+  var autoID = url.parse(req.url, true).query.autoID;
+  var data1 = {
+    c3: c3,
+    line: line,
+    a1: a1,
+    b1: b1,
+    f1: f1,
+    m1: m1,
+    a2: a2,
+    b2: b2,
+    f2: f2,
+    m2: m2
+  };
+  var query = "UPDATE table71 SET ? WHERE autoID = "+autoID;
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//删除表71
+app.get('/deleteTable71', function (req, res) {
+  var pk = url.parse(req.url, true).query.autoID;
+  var query = "DELETE FROM table71 WHERE autoID = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+
+/**
+ * 表5相关
+ */
+//获取表5数据 
+app.get('/getTable5', function (req, res) {
+  var query = "SELECT * FROM table5";
+  connection.query(query, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取表5数据 
+app.get('/getTable5ByPK', function (req, res) {
+  var id = url.parse(req.url, true).query.autoID;
+  var query = "SELECT * FROM table5 where autoID = ?";
+  connection.query(query, [id], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//添加表5
+// id name address area a1 a2 a3 a4 a5 doc city
+app.get('/addTable5', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  var id = url.parse(req.url, true).query.id;
+  var address = url.parse(req.url, true).query.address;
+  var area = url.parse(req.url, true).query.area;
+  var a1 = url.parse(req.url, true).query.a1;
+  var a2 = url.parse(req.url, true).query.a2;
+  var a3 = url.parse(req.url, true).query.a3;
+  var a4 = url.parse(req.url, true).query.a4;
+  var a5 = url.parse(req.url, true).query.a5;
+  var doc = url.parse(req.url, true).query.doc;
+  var city = url.parse(req.url, true).query.city;
+  var data1 = {
+    name: name,
+    id: id,
+    address: address,
+    area: area,
+    a1: a1,
+    a2: a2,
+    a3: a3,
+    a4: a4,
+    a5: a5,
+    doc: doc,
+    city: city
+  };
+  var query = "INSERT INTO table5 SET ?";
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//更新表5
+app.get('/updateTable5', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  var id = url.parse(req.url, true).query.id;
+  var address = url.parse(req.url, true).query.address;
+  var area = url.parse(req.url, true).query.area;
+  var a1 = url.parse(req.url, true).query.a1;
+  var a2 = url.parse(req.url, true).query.a2;
+  var a3 = url.parse(req.url, true).query.a3;
+  var a4 = url.parse(req.url, true).query.a4;
+  var a5 = url.parse(req.url, true).query.a5;
+  var doc = url.parse(req.url, true).query.doc;
+  var autoID = url.parse(req.url, true).query.autoID;
+  var data1 = {
+    name: name,
+    id: id,
+    address: address,
+    area: area,
+    a1: a1,
+    a2: a2,
+    a3: a3,
+    a4: a4,
+    a5: a5,
+    doc: doc
+  };
+  var query = "UPDATE table5 SET ? WHERE autoID = "+autoID;
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//删除表5
+app.get('/deleteTable5', function (req, res) {
+  var pk = url.parse(req.url, true).query.autoID;
+  var query = "DELETE FROM table5 WHERE autoID = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+
 
 /**
  * 表4-3相关
