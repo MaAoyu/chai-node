@@ -540,6 +540,14 @@ app.get('/deleteTable2', function (req, res) {
  * 表一相关
  */
 //根据村子获取表一面积 
+app.get('/getTable1SumArea', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT sum(area) FROM table1 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//根据村子获取表一面积 
 app.get('/getTable1Area', function (req, res) {
   var city = url.parse(req.url, true).query.city;
   var query = "SELECT area FROM table1 where city = ?";
