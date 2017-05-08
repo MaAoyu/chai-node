@@ -151,6 +151,85 @@ app.get('/addTablePeople', function (req, res) {
   });
 })
 
+
+/**
+ * 表4-3相关
+ */
+//获取表4-3数据 
+app.get('/getTable43', function (req, res) {
+  var query = "SELECT * FROM table43";
+  connection.query(query, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取表4-3数据 
+app.get('/getTable43ByPK', function (req, res) {
+  var id = url.parse(req.url, true).query.autoID;
+  var query = "SELECT * FROM table43 where autoID = ?";
+  connection.query(query, [id], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//添加表4-3
+//name id type unit quantity price total city
+app.get('/addTable43', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  var id = url.parse(req.url, true).query.id;
+  var type = url.parse(req.url, true).query.type;
+  var unit = url.parse(req.url, true).query.unit;
+  var quantity = url.parse(req.url, true).query.quantity;
+  var total = url.parse(req.url, true).query.total;
+  var price = url.parse(req.url, true).query.price;
+  var city = url.parse(req.url, true).query.city;
+  var data1 = {
+    name: name,
+    id: id,
+    type: type,
+    unit: unit,
+    quantity: quantity,
+    total: total,
+    price: price,
+    city: city
+  };
+  var query = "INSERT INTO table43 SET ?";
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//更新表4-3
+app.get('/updateTable43', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  var id = url.parse(req.url, true).query.id;
+  var type = url.parse(req.url, true).query.type;
+  var unit = url.parse(req.url, true).query.unit;
+  var quantity = url.parse(req.url, true).query.quantity;
+  var total = url.parse(req.url, true).query.total;
+  var price = url.parse(req.url, true).query.price;
+  var autoID = url.parse(req.url, true).query.autoID;
+  var data1 = {
+    name: name,
+    id: id,
+    type: type,
+    unit: unit,
+    quantity: quantity,
+    total: total,
+    price: price
+  };
+  var query = "UPDATE table43 SET name=?,id=?,type=?,unit=?,quantity=?,price=?,total=? WHERE autoID = "+autoID;
+  connection.query(query, [name,id, type, unit, quantity, price, total], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//删除表4-3
+app.get('/deleteTable43', function (req, res) {
+  var pk = url.parse(req.url, true).query.autoID;
+  var query = "DELETE FROM table43 WHERE autoID = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+
+
 /**
  * 表4-1相关
  */
@@ -431,10 +510,19 @@ app.get('/getTable3Count', function (req, res) {
     res.json(dbres);
   });
 })
+//根据镇获取表三数据 
+app.get('/getTable3Bycity3', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT area,type2,prj,quantity,city FROM table3 where city LIKE  '" + city + "%'";
+  connection.query(query, [city], function (err, dbres) {
+    //console.log(err+'***'+dbres);
+    res.json(dbres);
+  });
+})
 //根据村子获取表三数据 
 app.get('/getTable3Bycity', function (req, res) {
   var city = url.parse(req.url, true).query.city;
-  var query = "SELECT * FROM table3 where city = ?";
+  var query = "SELECT area,type2,prj,quantity,city FROM table3 where city = ?";
   connection.query(query, [city], function (err, dbres) {
     res.json(dbres);
   });
@@ -542,8 +630,9 @@ app.get('/deleteTable2', function (req, res) {
 //根据村子获取表一面积 
 app.get('/getTable1SumArea', function (req, res) {
   var city = url.parse(req.url, true).query.city;
-  var query = "SELECT sum(area) FROM table1 where city = ?";
+  var query = "SELECT sum(area) FROM table1 where city LIKE  '" + city + "%'";
   connection.query(query, [city], function (err, dbres) {
+    //console.log(err+'***'+dbres);
     res.json(dbres);
   });
 })
