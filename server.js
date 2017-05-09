@@ -152,6 +152,109 @@ app.get('/addTablePeople', function (req, res) {
 })
 
 /**
+ * 表101相关
+ */
+//获取表101数据 
+app.get('/getTable101', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  //console.log(city);
+  var query = "SELECT * FROM table101 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    //console.log(err+'***'+dbres);
+    res.json(dbres);
+  });
+})
+//更新表101
+//unit a1 a2 a3 a4 autoID
+app.get('/updateTable101', function (req, res) {
+  var unit = url.parse(req.url, true).query.unit;
+  var a1 = url.parse(req.url, true).query.a1;
+  var a2 = url.parse(req.url, true).query.a2;
+  var a3 = url.parse(req.url, true).query.a3;
+  var a4 = url.parse(req.url, true).query.a4;
+  var autoID = url.parse(req.url, true).query.autoID;
+  var query = "UPDATE table101 SET unit=?,a1=?,a2=?,a3=?,a4=? WHERE autoID = ?";
+  connection.query(query, [unit, a1, a2, a3, a4, autoID], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+/**
+ * 表93相关
+ */
+//获取表93数据 
+app.get('/getTable93', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT * FROM table93 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//更新表93
+//unit price a1 a2 a3 a4 autoID
+app.get('/updateTable93', function (req, res) {
+  var unit = url.parse(req.url, true).query.unit;
+  var price = url.parse(req.url, true).query.price;
+  var a1 = url.parse(req.url, true).query.a1;
+  var a2 = url.parse(req.url, true).query.a2;
+  var a3 = url.parse(req.url, true).query.a3;
+  var a4 = url.parse(req.url, true).query.a4;
+  var autoID = url.parse(req.url, true).query.autoID;
+  var query = "UPDATE table93 SET unit=?,price=?,a1=?,a2=?,a3=?,a4=? WHERE autoID = ?";
+  connection.query(query, [unit, price, a1, a2, a3, a4, autoID], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+/**
+ * 表92相关
+ */
+//获取表92数据 
+app.get('/getTable92Sum', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  //console.log(city);
+  var query = "SELECT index1,sum(a1),sum(a2),sum(a3),sum(a4) FROM table91 where city LIKE  '" + city + "%'"+"group by index1";
+  connection.query(query, function (err, dbres) {
+    //console.log(err+'***'+dbres);
+    res.json(dbres);
+  });
+})
+//获取表92数据 
+app.get('/getTable92', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  //console.log(city);
+  var query = "SELECT unit,price,index1 FROM table91 where city LIKE  '" + city + "%'";
+  connection.query(query, function (err, dbres) {
+    //console.log(err+'***'+dbres);
+    res.json(dbres);
+  });
+})
+/**
+ * 表91相关
+ */
+//获取表91数据 
+app.get('/getTable91', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT * FROM table91 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//更新表91
+//unit price a1 a2 a3 a4 autoID
+app.get('/updateTable91', function (req, res) {
+  var unit = url.parse(req.url, true).query.unit;
+  var price = url.parse(req.url, true).query.price;
+  var a1 = url.parse(req.url, true).query.a1;
+  var a2 = url.parse(req.url, true).query.a2;
+  var a3 = url.parse(req.url, true).query.a3;
+  var a4 = url.parse(req.url, true).query.a4;
+  var autoID = url.parse(req.url, true).query.autoID;
+  var query = "UPDATE table91 SET unit=?,price=?,a1=?,a2=?,a3=?,a4=? WHERE autoID = ?";
+  connection.query(query, [unit, price, a1, a2, a3, a4, autoID], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+
+/**
  * 表71相关
  */
 //获取表71数据 
