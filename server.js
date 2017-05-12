@@ -110,6 +110,14 @@ app.get('/login', function (req, res) {
 /**
  * 户主表相关
  */
+//根据id获取用户
+app.get('/getPeopleByID', function (req, res) {
+  var id = url.parse(req.url, true).query.id;
+  var query = "SELECT name FROM people where id = ?";
+  connection.query(query, [id], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //删除用户表
 app.get('/deletePeopleTable', function (req, res) {
   var pk = url.parse(req.url, true).query.pk;
@@ -257,10 +265,21 @@ app.get('/updateTable91', function (req, res) {
 /**
  * 表71相关
  */
+//获取表71行数
+app.get('/getTable71Count', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT count(*) FROM table71 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //获取表71数据 
 app.get('/getTable71', function (req, res) {
-  var query = "SELECT * FROM table71";
-  connection.query(query, function (err, dbres) {
+  var city = url.parse(req.url, true).query.city;
+  var page = url.parse(req.url, true).query.page;
+  var limit1 = 10 * (page-1);
+  var query = "SELECT * FROM table71 where city = ? limit ?,10";
+  connection.query(query, [city,limit1], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -346,10 +365,21 @@ app.get('/deleteTable71', function (req, res) {
 /**
  * 表5相关
  */
+//获取表5行数
+app.get('/getTable5Count', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT count(*) FROM table5 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //获取表5数据 
 app.get('/getTable5', function (req, res) {
-  var query = "SELECT * FROM table5";
-  connection.query(query, function (err, dbres) {
+  var city = url.parse(req.url, true).query.city;
+  var page = url.parse(req.url, true).query.page;
+  var limit1 = 10 * (page-1);
+  var query = "SELECT * FROM table5 where city = ? limit ?,10";
+  connection.query(query, [city,limit1], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -436,10 +466,21 @@ app.get('/deleteTable5', function (req, res) {
 /**
  * 表4-3相关
  */
+//获取表4-3行数
+app.get('/getTable43Count', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT count(*) FROM table43 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //获取表4-3数据 
 app.get('/getTable43', function (req, res) {
-  var query = "SELECT * FROM table43";
-  connection.query(query, function (err, dbres) {
+  var city = url.parse(req.url, true).query.city;
+  var page = url.parse(req.url, true).query.page;
+  var limit1 = 10 * (page-1);
+  var query = "SELECT * FROM table43 where city = ? limit ?,10";
+  connection.query(query, [city,limit1], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -535,7 +576,7 @@ app.get('/getAllTable412Datas', function (req, res) {
   var city = url.parse(req.url, true).query.city;
   var page = url.parse(req.url, true).query.page;
   var limit1 = 10 * (page-1);
-  var query = "SELECT * FROM table4 where city = ? limit ?,10";
+  var query = "SELECT name,sum(area1),sum(area1*price+quantity*price2+o1+o2+o3+o4) FROM table4 where city = ? group by name limit ?,10";
   connection.query(query, [city,limit1], function (err, dbres) {
     res.json(dbres);
   });
@@ -553,6 +594,16 @@ app.get('/getAllTable411Datas2', function (req, res) {
   var city = url.parse(req.url, true).query.city;
   var query = "SELECT * FROM table2 where city = ?";
   connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//根据id获取表411汇总数据
+app.get('/getSumTable411Datas', function (req, res) {
+  var ids = url.parse(req.url, true).query.ids;
+  //console.log(ids);
+  var query = "SELECT name,sum(quantity),sum(price*quantity) FROM table2 where id in ("+ids+") group by name";
+  connection.query(query, function (err, dbres) {
+    //console.log(err);
     res.json(dbres);
   });
 })
@@ -601,6 +652,14 @@ app.get('/getTable4Count', function (req, res) {
     res.json(dbres);
   });
 })
+//获取表四全部数据 
+app.get('/gettable4AllDatas', function (req, res) {
+  var id = url.parse(req.url, true).query.id;
+  var query = "SELECT * FROM table4 where id = ?";
+  connection.query(query, [id], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //获取表四数据 
 app.get('/gettable4Datas', function (req, res) {
   var id = url.parse(req.url, true).query.id;
@@ -608,6 +667,7 @@ app.get('/gettable4Datas', function (req, res) {
   var limit1 = 10 * (page-1);
   var query = "SELECT * FROM table4 where id = ? limit ?,10";
   connection.query(query, [id,limit1], function (err, dbres) {
+    console.log(dbres);
     res.json(dbres);
   });
 })
@@ -692,8 +752,8 @@ app.get('/updateTable4ByT3', function (req, res) {
   var fid = url.parse(req.url, true).query.autoID;
   var query = "UPDATE table4 SET table4.index=?,type1=?,area1=?,t1=?,t2=?,t3=?,t4=?,t5=?,arcName=?,unit=?,quantity=? WHERE fID = ?";
   connection.query(query, [index,type1,area1,t1,t2,t3,t4,t5,arcName,unit,quantity,fid], function (err, dbres) {
-    console.log(err);
-    console.log(dbres);
+    //console.log(err);
+    //console.log(dbres);
     res.json(dbres);
   });
 })
@@ -964,9 +1024,9 @@ app.get('/addTable1', function (req, res) {
     quantity: quantity,
     city: city
   };
-  //console.log(data1);
   var query = "INSERT INTO table1 SET ?";
   connection.query(query, data1, function (err, dbres) {
+    //console.log(err+'###'+dbres);
     res.json(dbres);
   });
 })
@@ -1022,8 +1082,9 @@ app.get('/getTable1ByPK', function (req, res) {
 })
 //得到表1行数
 app.get('/getTable1Count', function (req, res) {
-  var query = "SELECT count(*) FROM table1";
-  connection.query(query, function (err, dbres) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT count(*) FROM table1 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
     res.json(dbres);
   });
 })
