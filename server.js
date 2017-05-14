@@ -180,9 +180,58 @@ app.get('/updateTable101', function (req, res) {
   var a2 = url.parse(req.url, true).query.a2;
   var a3 = url.parse(req.url, true).query.a3;
   var a4 = url.parse(req.url, true).query.a4;
+  var b1 = url.parse(req.url, true).query.b1;
+  var b2 = url.parse(req.url, true).query.b2;
+  var b3 = url.parse(req.url, true).query.b3;
+  var b4 = url.parse(req.url, true).query.b4;
   var autoID = url.parse(req.url, true).query.autoID;
-  var query = "UPDATE table101 SET unit=?,a1=?,a2=?,a3=?,a4=? WHERE autoID = ?";
-  connection.query(query, [unit, a1, a2, a3, a4, autoID], function (err, dbres) {
+  var query = "UPDATE table101 SET unit=?,a1=?,a2=?,a3=?,a4=?,b1=?,b2=?,b3=?,b4=? WHERE autoID = ?";
+  connection.query(query, [unit, a1, a2, a3, a4, b1, b2, b3, b4, autoID], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+
+
+/**
+ * 表9相关
+ */
+//获取表9数据第一行数据 
+app.get('/getTable9L1', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT sum(a1),sum(a2),sum(a3),sum(a4),sum(a1*price),sum(a2*price),sum(a3*price),sum(a4*price) FROM table91 where index1 < 8 and city LIKE  '" + city + "%'";
+  connection.query(query, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取表9数据第二行
+app.get('/getTable9L2', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT sum(a1),sum(a2),sum(a3),sum(a4),sum(a1*price),sum(a2*price),sum(a3*price),sum(a4*price) FROM table93 where index1 < 7 and city LIKE  '" + city + "%'";
+  connection.query(query, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取表9数据4
+app.get('/getTable9L4', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT sum(a1),sum(a2),sum(a3),sum(a4),sum(a1*price),sum(a2*price),sum(a3*price),sum(a4*price) FROM table93 where index1 in (8,9) and city LIKE  '" + city + "%'";
+  connection.query(query, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取表9数据3-1
+app.get('/getTable9L31', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT sum(a1),sum(a2),sum(a3),sum(a4),sum(a1*price),sum(a2*price),sum(a3*price),sum(a4*price) FROM table91 where index1=8 and city LIKE  '" + city + "%'";
+  connection.query(query, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取表9数据3-2
+app.get('/getTable9L32', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT sum(a1),sum(a2),sum(a3),sum(a4),sum(a1*price),sum(a2*price),sum(a3*price),sum(a4*price) FROM table93 where index1=7 and city LIKE  '" + city + "%'";
+  connection.query(query, function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -262,6 +311,17 @@ app.get('/updateTable91', function (req, res) {
   });
 })
 
+/**
+ * 表7相关
+ */
+//获取表7数据 
+app.get('/getTable7', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT sum(a1),sum(b1),sum(f1),sum(m1),sum(a2),sum(b2),sum(f2),sum(m2) FROM table71 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 /**
  * 表71相关
  */
