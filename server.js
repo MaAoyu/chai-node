@@ -106,6 +106,16 @@ app.get('/login', function (req, res) {
       res.send({"ok":0});
   });
 })
+//修改密码
+app.get('/modifyPassword', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  var passWord = url.parse(req.url, true).query.passWord;
+  console.log(passWord);
+  var query = "UPDATE user SET password=? WHERE name = ?";
+  connection.query(query, [passWord,name], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 
 /**
  * 户主表相关
