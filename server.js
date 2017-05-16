@@ -625,6 +625,13 @@ app.get('/deleteTable43', function (req, res) {
 /**
  * 表4-1相关
  */
+app.get('/getAllTable413Datas2', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT * FROM table4 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //得到表412行数
 app.get('/getTable412Count', function (req, res) {
   var city = url.parse(req.url, true).query.city;
