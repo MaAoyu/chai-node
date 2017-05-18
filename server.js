@@ -839,6 +839,14 @@ app.get('/updateTable4ByT3', function (req, res) {
  * 表三相关
  */
 //删除表三
+app.get('/deleteTable2ByT1', function (req, res) {
+  var pk = url.parse(req.url, true).query.pk;
+  var query = "DELETE FROM table3 WHERE id = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//删除表三
 app.get('/deleteTable3', function (req, res) {
   var pk = url.parse(req.url, true).query.pk;
   var query = "DELETE FROM table3 WHERE autoID = ?";
