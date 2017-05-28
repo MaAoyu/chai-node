@@ -45,6 +45,27 @@ app.get('/getRecordNum', function (req, res) {
     res.send(dbres);
   });
 })
+//tj
+app.get('/test2', function (req, res) {
+  var query = "select * FROM record2";
+  connection.query(query, function (err, dbres) {
+    res.send(dbres);
+  });
+})
+//签到UPDATE db.record SET flag='没有' WHERE name != '';
+app.get('/record2', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  var query = "UPDATE record2 SET flag='ok' WHERE name = ?";
+  connection.query(query, [name], function (err, dbres) {
+    res.send(dbres);
+  });
+})
+app.get('/getRecordNum2', function (req, res) {
+  var query = "select count(*) FROM record2 WHERE flag = 'ok'";
+  connection.query(query, function (err, dbres) {
+    res.send(dbres);
+  });
+})
 
 
 /**
