@@ -23,14 +23,29 @@ app.all('*', function (req, res, next) {
 });
 
 app.get('/test', function (req, res) {
-  var name = url.parse(req.url, true).query.name;
-  console.log("name:" + name);
-  var query = "select * FROM table2";
+  var query = "select * FROM record";
   connection.query(query, function (err, dbres) {
-    res.json(dbres);
+    res.send(dbres);
   });
 })
 //console.log(err+'***'+dbres);
+
+//签到
+app.get('/record', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  console.log("name:" + name);
+  var query = "UPDATE record SET flag=1 WHERE name = ?";
+  connection.query(query, [name], function (err, dbres) {
+    res.send(dbres);
+  });
+})
+app.get('/getRecordNum', function (req, res) {
+  var query = "select count(*) FROM record WHERE flag = 1";
+  connection.query(query, function (err, dbres) {
+    res.send(dbres);
+  });
+})
+
 
 /**
  * 权限表相关
