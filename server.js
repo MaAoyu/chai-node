@@ -30,11 +30,11 @@ app.get('/test', function (req, res) {
 })
 //console.log(err+'***'+dbres);
 
-//签到
+//签到UPDATE db.record SET flag='没有' WHERE name != '';
 app.get('/record', function (req, res) {
   var name = url.parse(req.url, true).query.name;
   console.log("name:" + name);
-  var query = "UPDATE record SET flag=1 WHERE name = ?";
+  var query = "UPDATE record SET flag='ok' WHERE name = ?";
   connection.query(query, [name], function (err, dbres) {
     res.send(dbres);
   });
