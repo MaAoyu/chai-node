@@ -40,7 +40,7 @@ app.get('/record', function (req, res) {
   });
 })
 app.get('/getRecordNum', function (req, res) {
-  var query = "select count(*) FROM record WHERE flag = 1";
+  var query = "select count(*) FROM record WHERE flag = 'ok'";
   connection.query(query, function (err, dbres) {
     res.send(dbres);
   });
