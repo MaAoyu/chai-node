@@ -66,6 +66,39 @@ app.get('/getRecordNum2', function (req, res) {
     res.send(dbres);
   });
 })
+//mdh
+app.get('/test3', function (req, res) {
+  var query = "select * FROM record3";
+  connection.query(query, function (err, dbres) {
+    res.send(dbres);
+  });
+})
+//add
+app.get('/add', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  var data1 = {
+    name: name,
+    flag: flag
+  };
+  var query = "INSERT INTO record3 SET ?";
+  connection.query(query, data1, function (err, dbres) {
+    res.send(dbres);
+  });
+})
+//签到UPDATE db.record SET flag='没有' WHERE name != '';
+app.get('/record3', function (req, res) {
+  var name = url.parse(req.url, true).query.name;
+  var query = "UPDATE record3 SET flag='ok' WHERE name = ?";
+  connection.query(query, [name], function (err, dbres) {
+    res.send(dbres);
+  });
+})
+app.get('/getRecordNum3', function (req, res) {
+  var query = "select count(*) FROM record3 WHERE flag = 'ok'";
+  connection.query(query, function (err, dbres) {
+    res.send(dbres);
+  });
+})
 
 
 /**
