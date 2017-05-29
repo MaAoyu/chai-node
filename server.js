@@ -78,11 +78,11 @@ app.get('/addRecord3', function (req, res) {
   var name = url.parse(req.url, true).query.name;
   var data1 = {
     name: name,
-    flag: ''
+    flag: '没有'
   };
   var query = "INSERT INTO record3 SET ?";
   connection.query(query, data1, function (err, dbres) {
-    console.log(data1+'@@@'+err+'***'+dbres);
+    //console.log(data1+'@@@'+err+'***'+dbres);
     res.send(dbres);
   });
 })
