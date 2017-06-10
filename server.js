@@ -31,6 +31,24 @@ app.get('/test', function (req, res) {
 //console.log(err+'***'+dbres);
 
 //签到UPDATE db.record SET flag='没有' WHERE name != '';
+app.get('/updateRecord', function (req, res) {
+  var query = "UPDATE db.record SET flag='没有' WHERE name != ''";
+  connection.query(query, function (err, dbres) {
+    res.send(dbres);
+  });
+})
+app.get('/updateRecord2', function (req, res) {
+  var query = "UPDATE db.record2 SET flag='没有' WHERE name != '';";
+  connection.query(query, function (err, dbres) {
+    res.send(dbres);
+  });
+})
+app.get('/updateRecord3', function (req, res) {
+  var query = "UPDATE db.record3 SET flag='没有' WHERE name != '';";
+  connection.query(query, function (err, dbres) {
+    res.send(dbres);
+  });
+})
 app.get('/record', function (req, res) {
   var name = url.parse(req.url, true).query.name;
   console.log("name:" + name);
