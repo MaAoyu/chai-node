@@ -6,10 +6,16 @@ var fs = require("fs");
 var mysql = require('mysql');
 // Creates MySql database connection
 var connection = mysql.createConnection({
+  // host: "localhost",
+  // user: "root",
+  // password: "143555",
+  // database: "db"
   host: "localhost",
-  user: "root",
-  password: "143555",
+  port: 3338,
+  user: "userzb",
+  password: "userzb888",
   database: "db"
+  
 });
 //app.use(express.static('image'));
 //设置跨域访问
