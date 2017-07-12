@@ -150,7 +150,7 @@ app.get('/updateUser', function (req, res) {
   var city2 = url.parse(req.url, true).query.city2;
   var city3 = url.parse(req.url, true).query.city3;
   var query = "UPDATE user SET password=?,city1=?,city2=?,city3=? WHERE name = ?";
-  connection.query(query, [password,city1,city2,city3,name], function (err, dbres) {
+  connection.query(query, [password, city1, city2, city3, name], function (err, dbres) {
     // console.log(err);
     // console.log(JSON.stringify(dbres));
     res.json(dbres);
@@ -186,12 +186,12 @@ app.get('/login', function (req, res) {
   var query = "SELECT * FROM user WHERE name = ?";
   connection.query(query, [name], function (err, dbres) {
     //res.send(err+'***'+dbres);
-    if(dbres=='')
-      res.send({"ok":-1});
-    else if(dbres[0].password == passWord)
+    if (dbres == '')
+      res.send({ "ok": -1 });
+    else if (dbres[0].password == passWord)
       res.send(dbres[0]);
     else
-      res.send({"ok":0});
+      res.send({ "ok": 0 });
   });
 })
 //修改密码
@@ -200,7 +200,7 @@ app.get('/modifyPassword', function (req, res) {
   var passWord = url.parse(req.url, true).query.passWord;
   console.log(passWord);
   var query = "UPDATE user SET password=? WHERE name = ?";
-  connection.query(query, [passWord,name], function (err, dbres) {
+  connection.query(query, [passWord, name], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -253,6 +253,93 @@ app.get('/addTablePeople', function (req, res) {
   };
   var query = "INSERT INTO people SET ?";
   connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+
+/**
+ * 表413相关
+ */
+//根据id获取表413数据 
+app.get('/getTable413ById', function (req, res) {
+  var id = url.parse(req.url, true).query.id;
+  var query = "SELECT * FROM table413 where id = ?";
+  connection.query(query, [id], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//添加
+app.get('/addTable413', function (req, res) {
+  //name id price total text quantity city
+  var name = url.parse(req.url, true).query.name;
+  var id = url.parse(req.url, true).query.id;
+  var price = url.parse(req.url, true).query.price;
+  var total = url.parse(req.url, true).query.total;
+  var text = url.parse(req.url, true).query.text;
+  var quantity = url.parse(req.url, true).query.quantity;
+  var city = url.parse(req.url, true).query.city;
+  var data1 = {
+    name: name,
+    id: id,
+    price: price,
+    total: total,
+    text: text,
+    quantity: quantity,
+    city: city
+  };
+  var query = "INSERT INTO table413 SET ?";
+  connection.query(query, data1, function (err, dbres) {
+    //console.log(err+'###'+dbres);
+    res.json(dbres);
+  });
+})
+//更新
+app.get('/updateTable413', function (req, res) {
+  //name id price total text quantity city
+  var name = url.parse(req.url, true).query.name;
+  var id = url.parse(req.url, true).query.id;
+  var price = url.parse(req.url, true).query.price;
+  var total = url.parse(req.url, true).query.total;
+  var text = url.parse(req.url, true).query.text;
+  var quantity = url.parse(req.url, true).query.quantity;
+  var city = url.parse(req.url, true).query.city;
+  var data1 = {
+    name: name,
+    id: id,
+    price: price,
+    total: total,
+    text: text,
+    quantity: quantity,
+    city: city
+  };
+  var query = "UPDATE table413 SET ? WHERE id = " + data1.id;
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//删除表413
+app.get('/deleteTable413', function (req, res) {
+  var pk = url.parse(req.url, true).query.pk;
+  var query = "DELETE FROM table413 WHERE id = ?";
+  connection.query(query, [pk], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//得到表413行数
+app.get('/getTable413Count', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT count(*) FROM table413 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//得到表413数据
+app.get('/getAllTable413Datas', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var page = url.parse(req.url, true).query.page;
+  var limit1 = 10 * (page - 1);
+  var query = "SELECT * FROM table413 where city = ? limit ?,10";
+  connection.query(query, [city, limit1], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -366,7 +453,7 @@ app.get('/updateTable93', function (req, res) {
 app.get('/getTable92Sum', function (req, res) {
   var city = url.parse(req.url, true).query.city;
   //console.log(city);
-  var query = "SELECT index1,sum(a1),sum(a2),sum(a3),sum(a4) FROM table91 where city LIKE  '" + city + "%'"+"group by index1";
+  var query = "SELECT index1,sum(a1),sum(a2),sum(a3),sum(a4) FROM table91 where city LIKE  '" + city + "%'" + "group by index1";
   connection.query(query, function (err, dbres) {
     //console.log(err+'***'+dbres);
     res.json(dbres);
@@ -435,9 +522,9 @@ app.get('/getTable71Count', function (req, res) {
 app.get('/getTable71', function (req, res) {
   var city = url.parse(req.url, true).query.city;
   var page = url.parse(req.url, true).query.page;
-  var limit1 = 10 * (page-1);
+  var limit1 = 10 * (page - 1);
   var query = "SELECT * FROM table71 where city = ? limit ?,10";
-  connection.query(query, [city,limit1], function (err, dbres) {
+  connection.query(query, [city, limit1], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -483,7 +570,7 @@ app.get('/addTable71', function (req, res) {
 })
 //更新表71
 app.get('/updateTable71', function (req, res) {
-   var c3 = url.parse(req.url, true).query.c3;
+  var c3 = url.parse(req.url, true).query.c3;
   var line = url.parse(req.url, true).query.line;
   var a1 = url.parse(req.url, true).query.a1;
   var b1 = url.parse(req.url, true).query.b1;
@@ -506,7 +593,7 @@ app.get('/updateTable71', function (req, res) {
     f2: f2,
     m2: m2
   };
-  var query = "UPDATE table71 SET ? WHERE autoID = "+autoID;
+  var query = "UPDATE table71 SET ? WHERE autoID = " + autoID;
   connection.query(query, data1, function (err, dbres) {
     res.json(dbres);
   });
@@ -535,9 +622,9 @@ app.get('/getTable5Count', function (req, res) {
 app.get('/getTable5', function (req, res) {
   var city = url.parse(req.url, true).query.city;
   var page = url.parse(req.url, true).query.page;
-  var limit1 = 10 * (page-1);
+  var limit1 = 10 * (page - 1);
   var query = "SELECT * FROM table5 where city = ? limit ?,10";
-  connection.query(query, [city,limit1], function (err, dbres) {
+  connection.query(query, [city, limit1], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -606,7 +693,7 @@ app.get('/updateTable5', function (req, res) {
     a5: a5,
     doc: doc
   };
-  var query = "UPDATE table5 SET ? WHERE autoID = "+autoID;
+  var query = "UPDATE table5 SET ? WHERE autoID = " + autoID;
   connection.query(query, data1, function (err, dbres) {
     res.json(dbres);
   });
@@ -636,9 +723,9 @@ app.get('/getTable43Count', function (req, res) {
 app.get('/getTable43', function (req, res) {
   var city = url.parse(req.url, true).query.city;
   var page = url.parse(req.url, true).query.page;
-  var limit1 = 10 * (page-1);
+  var limit1 = 10 * (page - 1);
   var query = "SELECT * FROM table43 where city = ? limit ?,10";
-  connection.query(query, [city,limit1], function (err, dbres) {
+  connection.query(query, [city, limit1], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -695,8 +782,8 @@ app.get('/updateTable43', function (req, res) {
     total: total,
     price: price
   };
-  var query = "UPDATE table43 SET name=?,id=?,type=?,unit=?,quantity=?,price=?,total=? WHERE autoID = "+autoID;
-  connection.query(query, [name,id, type, unit, quantity, price, total], function (err, dbres) {
+  var query = "UPDATE table43 SET name=?,id=?,type=?,unit=?,quantity=?,price=?,total=? WHERE autoID = " + autoID;
+  connection.query(query, [name, id, type, unit, quantity, price, total], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -709,13 +796,58 @@ app.get('/deleteTable43', function (req, res) {
   });
 })
 
+/**
+ * 表4-2相关
+ */
+//获取42编号
+app.get('/getTable42mId', function (req, res) {
+  var query = "SELECT mId,c4,type FROM table42";
+  connection.query(query, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//判断是否存在
+app.get('/isTable42mId', function (req, res) {
+  var c4 = url.parse(req.url, true).query.c4;
+  var type = url.parse(req.url, true).query.type;
+  var query = "SELECT mId FROM table42 where c4= ? and type=?";
+  connection.query(query, [c4,type], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//添加42编号
+app.get('/saveTable42mId', function (req, res) {
+  var mId = url.parse(req.url, true).query.mId;
+  var c4 = url.parse(req.url, true).query.c4;
+  var type = url.parse(req.url, true).query.type;
+  var query = "INSERT INTO table42 SET ?";
+  var data1 = {
+    mId: mId,
+    c4: c4,
+    type: type
+  };
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//修改42编号
+app.get('/updateTable42mId', function (req, res) {
+  var mId = url.parse(req.url, true).query.mId;
+  var c4 = url.parse(req.url, true).query.c4;
+  var type = url.parse(req.url, true).query.type;
+  var query = "UPDATE table42 SET mId=? WHERE c4 = ? and type = ?";
+  connection.query(query, [mId,c4,type], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+
 
 /**
  * 表4-1相关
  */
 app.get('/getAllTable413Datas2', function (req, res) {
   var city = url.parse(req.url, true).query.city;
-  var query = "SELECT * FROM table4 where city = ?";
+  var query = "SELECT * FROM table413 where city = ?";
   connection.query(query, [city], function (err, dbres) {
     res.json(dbres);
   });
@@ -740,12 +872,57 @@ app.get('/getAllTable412Datas2', function (req, res) {
 app.get('/getAllTable412Datas', function (req, res) {
   var city = url.parse(req.url, true).query.city;
   var page = url.parse(req.url, true).query.page;
-  var limit1 = 10 * (page-1);
+  var limit1 = 10 * (page - 1);
   var query = "SELECT name,sum(area1),sum(area1*price+quantity*price2+o1+o2+o3+o4) FROM table4 where city = ? group by name limit ?,10";
-  connection.query(query, [city,limit1], function (err, dbres) {
+  connection.query(query, [city, limit1], function (err, dbres) {
     res.json(dbres);
   });
 })
+//根据村名、户名获取412编号
+app.get('/getTable412mId', function (req, res) {
+  var c4name = url.parse(req.url, true).query.c4name;
+  var query = "SELECT mId,name FROM table412 where city= ?";
+  connection.query(query, [c4name], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//判断是否存在
+app.get('/isTable412mId', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var name = url.parse(req.url, true).query.name;
+  var query = "SELECT mId FROM table412 where city= ? and name=?";
+  connection.query(query, [city,name], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//添加412编号
+app.get('/saveTable412mId', function (req, res) {
+  var mId = url.parse(req.url, true).query.mId;
+  var name = url.parse(req.url, true).query.name;
+  var city = url.parse(req.url, true).query.city;
+  var query = "INSERT INTO table412 SET ?";
+  var data1 = {
+    mId: mId,
+    city: city,
+    name: name
+  };
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//修改412编号
+app.get('/updateTable412mId', function (req, res) {
+  var mId = url.parse(req.url, true).query.mId;
+  var name = url.parse(req.url, true).query.name;
+  var city = url.parse(req.url, true).query.city;
+  var query = "UPDATE table412 SET mId=? WHERE name = ? and city = ?";
+  connection.query(query, [mId,name,city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+
+
+
 //得到表411行数
 app.get('/getTable411Count', function (req, res) {
   var city = url.parse(req.url, true).query.city;
@@ -766,9 +943,9 @@ app.get('/getAllTable411Datas2', function (req, res) {
 app.get('/getSumTable411Datas', function (req, res) {
   var ids = url.parse(req.url, true).query.ids;
   //console.log(ids);
-  var query = "SELECT name,sum(quantity),sum(price*quantity) FROM table2 where id in ("+ids+") group by name";
+  var query = "SELECT name,sum(quantity),sum(price*quantity) FROM table2 where id in (" + ids + ") group by name";
   connection.query(query, function (err, dbres) {
-    //console.log(err);
+    //console.log(dbres);
     res.json(dbres);
   });
 })
@@ -776,9 +953,51 @@ app.get('/getSumTable411Datas', function (req, res) {
 app.get('/getAllTable411Datas', function (req, res) {
   var city = url.parse(req.url, true).query.city;
   var page = url.parse(req.url, true).query.page;
-  var limit1 = 10 * (page-1);
+  var limit1 = 10 * (page - 1);
   var query = "SELECT * FROM table2 where city = ? limit ?,10";
-  connection.query(query, [city,limit1], function (err, dbres) {
+  connection.query(query, [city, limit1], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//根据村名、户名获取411编号
+app.get('/getTable411mId', function (req, res) {
+  var c4name = url.parse(req.url, true).query.c4name;
+  var query = "SELECT mId,name FROM table411 where city= ?";
+  connection.query(query, [c4name], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//判断是否存在
+app.get('/isTable411mId', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var name = url.parse(req.url, true).query.name;
+  var query = "SELECT mId FROM table411 where city= ? and name=?";
+  connection.query(query, [city,name], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//添加411编号
+app.get('/saveTable411mId', function (req, res) {
+  var mId = url.parse(req.url, true).query.mId;
+  var name = url.parse(req.url, true).query.name;
+  var city = url.parse(req.url, true).query.city;
+  var query = "INSERT INTO table411 SET ?";
+  var data1 = {
+    mId: mId,
+    city: city,
+    name: name
+  };
+  connection.query(query, data1, function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//修改411编号
+app.get('/updateTable411mId', function (req, res) {
+  var mId = url.parse(req.url, true).query.mId;
+  var name = url.parse(req.url, true).query.name;
+  var city = url.parse(req.url, true).query.city;
+  var query = "UPDATE table411 SET mId=? WHERE name = ? and city = ?";
+  connection.query(query, [mId,name,city], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -797,7 +1016,7 @@ app.get('/updateTable4', function (req, res) {
   var o4 = url.parse(req.url, true).query.o4;
   var fid = url.parse(req.url, true).query.fID;
   var query = "UPDATE table4 SET price=?,price2=?,o1=?,o2=?,o3=?,o4=? WHERE fID = ?";
-  connection.query(query, [price,price2,o1,o2,o3,o4,fid], function (err, dbres) {
+  connection.query(query, [price, price2, o1, o2, o3, o4, fid], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -829,9 +1048,9 @@ app.get('/gettable4AllDatas', function (req, res) {
 app.get('/gettable4Datas', function (req, res) {
   var id = url.parse(req.url, true).query.id;
   var page = url.parse(req.url, true).query.page;
-  var limit1 = 10 * (page-1);
+  var limit1 = 10 * (page - 1);
   var query = "SELECT * FROM table4 where id = ? limit ?,10";
-  connection.query(query, [id,limit1], function (err, dbres) {
+  connection.query(query, [id, limit1], function (err, dbres) {
     console.log(dbres);
     res.json(dbres);
   });
@@ -916,7 +1135,7 @@ app.get('/updateTable4ByT3', function (req, res) {
   var quantity = url.parse(req.url, true).query.quantity;
   var fid = url.parse(req.url, true).query.autoID;
   var query = "UPDATE table4 SET table4.index=?,type1=?,area1=?,t1=?,t2=?,t3=?,t4=?,t5=?,arcName=?,unit=?,quantity=? WHERE fID = ?";
-  connection.query(query, [index,type1,area1,t1,t2,t3,t4,t5,arcName,unit,quantity,fid], function (err, dbres) {
+  connection.query(query, [index, type1, area1, t1, t2, t3, t4, t5, arcName, unit, quantity, fid], function (err, dbres) {
     //console.log(err);
     //console.log(dbres);
     res.json(dbres);
@@ -1003,7 +1222,7 @@ app.get('/updateTable3', function (req, res) {
     quantity: quantity,
     autoID: autoID
   };
-  var query = "UPDATE table3 SET ? WHERE autoID = "+data1.autoID;
+  var query = "UPDATE table3 SET ? WHERE autoID = " + data1.autoID;
   connection.query(query, data1, function (err, dbres) {
     res.json(dbres);
   });
@@ -1045,9 +1264,9 @@ app.get('/getTable3Bycity', function (req, res) {
 app.get('/gettable3Datas', function (req, res) {
   var id = url.parse(req.url, true).query.id;
   var page = url.parse(req.url, true).query.page;
-  var limit1 = 10 * (page-1);
+  var limit1 = 10 * (page - 1);
   var query = "SELECT * FROM table3 where id = ? limit ?,10";
-  connection.query(query, [id,limit1], function (err, dbres) {
+  connection.query(query, [id, limit1], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -1068,7 +1287,7 @@ app.get('/updateTable2', function (req, res) {
   var prj = url.parse(req.url, true).query.prj;
   var type = url.parse(req.url, true).query.type;
   var query = "UPDATE table2 SET price = ? WHERE prj = ?";
-  connection.query(query, [type,prj], function (err, dbres) {
+  connection.query(query, [type, prj], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -1084,9 +1303,9 @@ app.get('/getTable2Count', function (req, res) {
 app.get('/gettable2Datas', function (req, res) {
   var id = url.parse(req.url, true).query.id;
   var page = url.parse(req.url, true).query.page;
-  var limit1 = 10 * (page-1);
+  var limit1 = 10 * (page - 1);
   var query = "SELECT * FROM table2 where id = ? limit ?,10";
-  connection.query(query, [id,limit1], function (err, dbres) {
+  connection.query(query, [id, limit1], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -1124,7 +1343,7 @@ app.get('/updateTable2ByT1', function (req, res) {
   var quantity = url.parse(req.url, true).query.quantity;
   var fid = url.parse(req.url, true).query.autoID;
   var query = "UPDATE table2 SET id = ?,prj=?,unit=?,quantity = ? WHERE fID = ?";
-  connection.query(query, [id,prj,unit,quantity,fid], function (err, dbres) {
+  connection.query(query, [id, prj, unit, quantity, fid], function (err, dbres) {
     res.json(dbres);
   });
 })
@@ -1232,7 +1451,7 @@ app.get('/updateTable1', function (req, res) {
     quantity: quantity,
     autoID: autoID
   };
-  var query = "UPDATE table1 SET ? WHERE autoID = "+data1.autoID;
+  var query = "UPDATE table1 SET ? WHERE autoID = " + data1.autoID;
   connection.query(query, data1, function (err, dbres) {
     res.json(dbres);
   });
