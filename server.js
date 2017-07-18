@@ -386,6 +386,23 @@ app.get('/updateTable101', function (req, res) {
 /**
  * 表9相关
  */
+app.get('/updateTable9Unit', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var id = url.parse(req.url, true).query.id;
+  var unit = url.parse(req.url, true).query.unit;
+  var query = "UPDATE table9 SET unit=? WHERE id = ? and city = ?";
+  connection.query(query, [unit, id, city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取表9单位
+app.get('/getTable9Unit', function (req, res) {
+  var city = url.parse(req.url, true).query.city;
+  var query = "SELECT id,unit FROM table9 where city = ?";
+  connection.query(query, [city], function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //获取表9数据第一行数据 
 app.get('/getTable9L1', function (req, res) {
   var city = url.parse(req.url, true).query.city;
@@ -504,7 +521,22 @@ app.get('/updateTable91', function (req, res) {
 
 /**
  * 表7相关
- */
+ */ 
+app.get('/updateTable7Line', function (req, res) {
+  var c2 = url.parse(req.url, true).query.c2;
+  var line = url.parse(req.url, true).query.line;
+  var query = "UPDATE table7 SET line=? WHERE c2 = ?";
+  connection.query(query, [line,c2], function (err, dbres) {
+    res.json(dbres);
+  });
+})
+//获取表7里程
+app.get('/getTable7Line', function (req, res) {
+  var query = "SELECT c2,line FROM table7";
+  connection.query(query, function (err, dbres) {
+    res.json(dbres);
+  });
+})
 //获取表7数据 
 app.get('/getTable7', function (req, res) {
   var city = url.parse(req.url, true).query.city;
